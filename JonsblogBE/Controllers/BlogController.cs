@@ -18,11 +18,27 @@ public class BlogController : ControllerBase
     {
         _context = context;
     }
+    
+    [HttpGet("files/{fileName}")]
+    public IActionResult GetHtmlFile(string fileName)
+    {
+        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "BlogFiles", fileName);
 
+        return PhysicalFile(filePath, "text/html");
+    }
+    
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Blog>>> GetAll()
     {
         return await _context.BlogPosts.ToListAsync();
+    }
+    
+    [HttpPost("files")]
+    public async Task<IActionResult> SavePost([FromBody] Blog blog)
+    {
+        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "BlogFiles", blog.Title);
+        await System.IO.File.WriteAllTextAsync(filePath, blog.Content);
+        return Ok();
     }
     
     [HttpPost]
