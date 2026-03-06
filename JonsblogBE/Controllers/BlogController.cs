@@ -36,7 +36,8 @@ public class BlogController : ControllerBase
     [HttpPost("files")]
     public async Task<IActionResult> SavePost([FromBody] Blog blog)
     {
-        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "BlogFiles", blog.Title);
+        var fileName = $"{blog.Title}-{blog.Date:MM-dd-yyyy}.html";
+        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "BlogFiles", fileName);
         await System.IO.File.WriteAllTextAsync(filePath, blog.Content);
         return Ok();
     }
