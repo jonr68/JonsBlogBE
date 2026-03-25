@@ -19,6 +19,16 @@ public class BlogController : ControllerBase
         _context = context;
     }
     
+    [HttpGet("files")]
+    public IActionResult GetFileList()
+    {
+        var dir = Path.Combine(Directory.GetCurrentDirectory(), "BlogFiles");
+        var files = Directory.GetFiles(dir)
+                             .Select(Path.GetFileName)
+                             .ToArray();
+        return Ok(files);
+    }
+
     [HttpGet("files/{fileName}")]
     public IActionResult GetHtmlFile(string fileName)
     {
